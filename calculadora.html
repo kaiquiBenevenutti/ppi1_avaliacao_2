@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js" integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
+    <title>Calculadora</title>
+</head>
+<body class="d-flex vh-100 justify-content-center align-items-center">
+    <div class="card" style="min-width: 320px;">
+      <div class="card-body p-3">
+        <input type="text" class="form-control mb-3 text-end" id="visor" value="" readonly >
+        <table class="table table-bordered mb-0">
+            <tr>
+              <td><button class="btn btn-light w-100" id="botao_mais">+</button></td>
+              <td><button class="btn btn-light w-100" id="botao_menos">–</button></td>
+              <td><button class="btn btn-light w-100" id="botao_vezes">×</button></td>
+              <td><button class="btn btn-light w-100" id="botao_dividir">÷</button></td>
+            </tr>
+            <tr>
+              <td><button class="btn btn-light w-100" id="botao_7">7</button></td>
+              <td><button class="btn btn-light w-100" id="botao_8">8</button></td>
+              <td><button class="btn btn-light w-100" id="botao_9">9</button></td>
+              <td rowspan="4" class="p-0">
+                <button class="btn btn-primary" style="width: 100% !important; height: 230px !important;" id="botao_igual">=</button>
+              </td>
+            </tr>
+            <tr>
+              <td><button class="btn btn-light w-100" id="botao_4">4</button></td>
+              <td><button class="btn btn-light w-100" id="botao_5">5</button></td>
+              <td><button class="btn btn-light w-100" id="botao_6">6</button></td>
+            </tr>
+            <tr>
+              <td><button class="btn btn-light w-100" id="botao_1">1</button></td>
+              <td><button class="btn btn-light w-100" id="botao_2">2</button></td>
+              <td><button class="btn btn-light w-100" id="botao_3">3</button></td>
+            </tr>
+            <tr>
+              <td><button class="btn btn-light w-100" id="botao_0">0</button></td>
+              <td><button class="btn btn-light w-100" id="botao_.">.</button></td>
+              <td><button class="btn btn-light w-100" id="botao_C">C</button></td>
+            </tr>
+          </table>
+        </div>
+    </div>
+    <script>
+        const visor      = document.getElementById('visor');
+        const botoes     = document.querySelectorAll('.btn-light');
+        const botaoC     = document.getElementById('botao_C');
+        const botaoIgual = document.getElementById('botao_igual');
+      
+        
+        botoes.forEach(btn => {
+          btn.addEventListener('click', () => {
+            visor.value += btn.textContent.trim();
+          });
+        });
+      
+        
+        botaoC.addEventListener('click', () => {
+          visor.value = '';
+        });
+      
+        
+        botaoIgual.addEventListener('click', calcular);
+      
+        function calcular() {
+          const raw = visor.value;
+          if (!/^[0-9+\-×÷*\/.\s]+$/.test(raw)) {
+            alert('Expressão inválida!');
+            return;
+          }
+          const expr = raw.replace(/×/g, '*').replace(/÷/g, '/');
+          try {
+            const resultado = eval(expr);
+            visor.value = resultado;
+          } catch {
+            alert('Erro ao calcular!');
+          }
+        }
+      </script>
+      
+</body>
+</html>
