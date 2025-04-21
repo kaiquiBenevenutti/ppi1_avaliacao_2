@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Cronômetro com Paradas</title>
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+  >
+</head>
+<body>
+  <div class="container vh-100 d-flex align-items-center justify-content-center">
+    <div class="row w-75 shadow p-4">
+      
+      <div class="col-md-8 bg-secondary text-white d-flex flex-column align-items-center justify-content-center position-relative" style="height: 300px;">
+        <h1 id="display" class="display-4">00:00:00</h1>
+        <div class="mt-3">
+          <button id="btn-start" class="btn btn-success me-2">Iniciar</button>
+          <button id="btn-pause" class="btn btn-warning me-2" disabled>Pausar</button>
+          <button id="btn-reset" class="btn btn-danger" disabled>Zerar</button>
+        </div>
+      </div>
+      
+      <div class="col-md-4 bg-light p-3" style="height: 300px; overflow-y: auto;">
+        <h5>Paradas</h5>
+        <ol id="lista-paradas"></ol>
+      </div>
+      
+    </div>
+  </div>
+
+  <script>
+    let startTime = 0;
+    let elapsedBefore = 0;
+    let timerInterval = null;
+    const display = document.getElementById('display');
+    const listaParadas = document.getElementById('lista-paradas');
+    const btnStart = document.getElementById('btn-start');
+    const btnPause = document.getElementById('btn-pause');
+    const btnReset = document.getElementById('btn-reset');
+
+    function formatTime(ms) {
+      const totalSeconds = Math.floor(ms / 1000);
+      const hh = String(Math.floor(totalSeconds / 3600)).padStart(2, '0');
+      const mm = String(Math.floor((totalSeconds % 3600) / 60)).padStart(2, '0');
+      const ss = String(totalSeconds % 60).padStart(2, '0');
+      return `${hh}:${mm}:${ss}`;
+    }
+
+    function updateDisplay() {
+      const now = Date.now();
+      const elapsed = now - startTime + elapsedBefore;
+      display.textContent = formatTime(elapsed);
+    }
+
+    function startTimer() {
+      startTime = Date.now();
+      timerInterval = setInterval(updateDisplay, 250);
+      btnStart.disabled = true;
+      btnPause.disabled = false;
+      btnReset.disabled = false;
+    }
+
+    function pauseTimer() {
+      clearInterval(timerInterval);
+      const now = Date.now();
+      const elapsed = now - startTime + elapsedBefore;
+      elapsedBefore = elapsed;
+      const li = document.createElement('li');
+      li.textContent = formatTime(elapsed);
+      listaParadas.appendChild(li);
+      btnStart.disabled = false;
+      btnPause.disabled = true;
+    }
+
+    function resetTimer() {
+      clearInterval(timerInterval);
+      startTime = 0;
+      elapsedBefore = 0;
+      display.textContent = '00:00:00';
+      listaParadas.innerHTML = '';
+      btnStart.disabled = false;
+      btnPause.disabled = true;
+      btnReset.disabled = true;
+    }
+
+    document.addEventListener('keydown', (e) => {
+  if (e.code === 'Space') {
+    e.preventDefault();
+    !btnStart.disabled ? startTimer() : pauseTimer();
+  }
+  if (e.code === 'KeyR') {
+    e.preventDefault();
+    resetTimer();
+  }
+});
+
+
+    btnStart.addEventListener('click', startTimer);
+    btnPause.addEventListener('click', pauseTimer);
+    btnReset.addEventListener('click', resetTimer);
+  </script>
+</body>
+</html>
