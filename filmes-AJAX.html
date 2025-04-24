@@ -61,6 +61,11 @@
                 min-height: 100vh;
             }
 
+            .sobre{
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+            }
+
             .banner {
                 background-color: white;
                 border-radius: 5px;
@@ -71,6 +76,7 @@
                 display: flex;
                 flex-direction: column;
                 align-items: center;
+                gap: 10px;
             }
 
             .banner:hover {
@@ -82,6 +88,7 @@
                 height: auto;
                 border-radius: 4px;
                 margin-bottom: 0.5rem;
+                align-self: center;
             }
 
             .banner h4 {
@@ -90,10 +97,21 @@
                 margin-bottom: 0.5rem;
             }
 
+            .banner h5 {
+                font-size: 1.2rem;
+                color: #2c3e50;
+                margin-bottom: 0.5rem;
+                text-align: center;
+            }
+
             .banner p {
                 font-size: 1rem;
                 color: #555;
-                margin: 2px 0;
+                margin: 6px 0;
+            }
+            .descricao{
+                max-height: 150px;
+                overflow-y: auto;
             }
 
     </style>
@@ -115,7 +133,7 @@
 
 
         filmes.forEach(tituloFilme => {
-            fetch(`http://www.omdbapi.com/?t=${encodeURIComponent(tituloFilme)}&apikey=76536016&`)
+            fetch(`http://www.omdbapi.com/?t=${encodeURIComponent(tituloFilme)}&plot=full&apikey=76536016&`)
             .then(response => response.json())
             .then(data => {
                 const banner = document.createElement("div");
@@ -126,11 +144,19 @@
                 banner.innerHTML = `
                     <img class="imagem" src="${data.Poster}" alt="Imagem do filme">
                     <h4 class="titulo" >${data.Title}</h4>
-                    <p class="ano" >Lançamento: ${data.Year}</p>
-                    <p class="tempo" >Duração: ${data.Runtime}</p>
-                    <p class="genero" >Genero: ${data.Genre}</p>
-                    <p class="nota" >Nota IMDb: ${data.imdbRating}</p>
-                    <img class="classificacao" src="${imagemClassificacao}" alt="Classificação indicativa" style="width: 50px; margin-top: 8px;">
+                    <div class="sobre">
+                        <div class="descricao">
+                            <h5> Resumo: </h5>
+                            <p> ${data.Plot}</p>
+                        </div>
+                        <div>
+                            <p class="ano" >Lançamento: ${data.Year}</p>
+                            <p class="tempo" >Duração: ${data.Runtime}</p>
+                            <p class="genero" >Genero: ${data.Genre}</p>
+                            <p class="nota" >Nota IMDb: ${data.imdbRating}</p>
+                            <img class="classificacao" src="${imagemClassificacao}" alt="Classificação indicativa" style="width: 50px; margin-top: 8px;">
+                        </div>
+                    </div>
                 `;
 
                 container.appendChild(banner);
