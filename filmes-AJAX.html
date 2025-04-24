@@ -5,36 +5,43 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Filmes</title>
     <style>
-
+        .container{
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1rem;
+            margin-top: 0.5rem;
+        }
+        .banner{
+            border: 1px solid black;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
-    <div>
-        <img id="imagem" alt="Imagem do filme">
-        <h4 id="titulo"></h4>
-        <p id="ano"></p>
-        <p id="duracao"></p>
-        <p id="generos"></p>
-        <p id="nota"></p>
-    </div>
+    <div class="container" id="filmeContainer"></div>
 
     <script>
-        const imagem = document.getElementById("imagem");
-        const titulo = document.getElementById("titulo");
-        const ano = document.getElementById("ano");
-        const duracao = document.getElementById("duracao");
-        const generos = document.getElementById("generos");
-        const nota = document.getElementById("nota");
+        const filmes = ["Cars", "Inception", "Interstellar", "Titanic", "Avengers"];
+        const container = document.getElementById("filmeContainer");
 
-        fetch('http://www.omdbapi.com/?t=cars&apikey=76536016&')
-        .then(response => response.json())
-        .then(data => {
-            imagem.src = data.Poster;
-            titulo.innerText = data.Title
-            ano.innerText = data.Year
-            duracao.innerText = data.Runtime
-            generos.innerText = data.Genre
-            nota.innerText = data.imdbRating
+        filmes.forEach(tituloFilme => {
+            fetch(`http://www.omdbapi.com/?t=${encodeURIComponent(tituloFilme)}&apikey=76536016&`)
+            .then(response => response.json())
+            .then(data => {
+                const banner = document.createElement("div");
+                banner.className = "banner";
+
+                banner.innerHTML = `
+                    <img src="${data.Poster}" alt="Imagem do filme">
+                    <h4>${data.Title}</h4>
+                    <p>${data.Year}</p>
+                    <p>${data.Runtime}</p>
+                    <p>${data.Genre}</p>
+                    <p>${data.imdbRating}</p>
+                `;
+
+                container.appendChild(banner);
+            });
         });
     </script>
 </body>
