@@ -5,24 +5,114 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Filmes</title>
     <style>
-        .container{
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 1rem;
-            margin-top: 0.5rem;
-        }
-        .banner{
-            border: 1px solid black;
-            text-align: center;
-        }
+            html, body, div, span, applet, object, iframe,
+            h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+            a, abbr, acronym, address, big, cite, code,
+            del, dfn, em, img, ins, kbd, q, s, samp,
+            small, strike, strong, sub, sup, tt, var,
+            b, u, i, center,
+            dl, dt, dd, ol, ul, li,
+            fieldset, form, label, legend,
+            table, caption, tbody, tfoot, thead, tr, th, td,
+            article, aside, canvas, details, embed, 
+            figure, figcaption, footer, header, hgroup, 
+            menu, nav, output, ruby, section, summary,
+            time, mark, audio, video {
+                margin: 0;
+                padding: 0;
+                border: 0;
+                font-size: 100%;
+                font: inherit;
+                vertical-align: baseline;
+            }
+            /* HTML5 display-role reset for older browsers */
+            article, aside, details, figcaption, figure, 
+            footer, header, hgroup, menu, nav, section {
+                display: block;
+            }
+            body {
+                line-height: 1;
+            }
+            ol, ul {
+                list-style: none;
+            }
+            blockquote, q {
+                quotes: none;
+            }
+            blockquote:before, blockquote:after,
+            q:before, q:after {
+                content: '';
+                content: none;
+            }
+            table {
+                border-collapse: collapse;
+                border-spacing: 0;
+            }
+
+            .container {
+                display: grid;
+                justify-content: center;
+                align-items: start;
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+                gap: 1.5rem;
+                padding: 2rem;
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                background: linear-gradient(to bottom, #3b5998, #1c1f4a);
+                min-height: 100vh;
+            }
+
+            .banner {
+                background-color: white;
+                border-radius: 5px;
+                overflow: hidden;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+                transition: transform 0.2s ease;
+                padding: 1rem;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .banner:hover {
+                transform: scale(1.03);
+            }
+
+            .banner img {
+                width: 100%;
+                height: auto;
+                border-radius: 4px;
+                margin-bottom: 0.5rem;
+            }
+
+            .banner h4 {
+                font-size: 1.4rem;
+                color: #2c3e50;
+                margin-bottom: 0.5rem;
+            }
+
+            .banner p {
+                font-size: 1rem;
+                color: #555;
+                margin: 2px 0;
+            }
+
     </style>
 </head>
 <body>
     <div class="container" id="filmeContainer"></div>
 
     <script>
-        const filmes = ["Cars", "Inception", "Interstellar", "Titanic", "Avengers"];
+        const filmes = ["Cars", "Inception", "Interstellar", "Titanic", "Avengers", "A Minecraft Movie"];
         const container = document.getElementById("filmeContainer");
+        const classificacoes = {
+            "G": "assets/classificacao-livre.png",
+            "PG": "assets/classificacao-10.png",
+            "PG-13": "assets/classificacao-12.png",
+            "R": "assets/classificacao-16.png",
+            "NC-17": "assets/classificacao-18.png",
+            "N/A": "assets/classificacao-na.png"
+        };
+
 
         filmes.forEach(tituloFilme => {
             fetch(`http://www.omdbapi.com/?t=${encodeURIComponent(tituloFilme)}&apikey=76536016&`)
@@ -31,13 +121,16 @@
                 const banner = document.createElement("div");
                 banner.className = "banner";
 
+                const imagemClassificacao = classificacoes[data.Rated] || classificacoes["N/A"];
+
                 banner.innerHTML = `
-                    <img src="${data.Poster}" alt="Imagem do filme">
-                    <h4>${data.Title}</h4>
-                    <p>${data.Year}</p>
-                    <p>${data.Runtime}</p>
-                    <p>${data.Genre}</p>
-                    <p>${data.imdbRating}</p>
+                    <img class="imagem" src="${data.Poster}" alt="Imagem do filme">
+                    <h4 class="titulo" >${data.Title}</h4>
+                    <p class="ano" >Lançamento: ${data.Year}</p>
+                    <p class="tempo" >Duração: ${data.Runtime}</p>
+                    <p class="genero" >Genero: ${data.Genre}</p>
+                    <p class="nota" >Nota IMDb: ${data.imdbRating}</p>
+                    <img class="classificacao" src="${imagemClassificacao}" alt="Classificação indicativa" style="width: 50px; margin-top: 8px;">
                 `;
 
                 container.appendChild(banner);
