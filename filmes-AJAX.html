@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Filmes</title>
+    <style>
+
+    </style>
+</head>
+<body>
+    <div>
+        <img id="imagem" alt="Imagem do filme">
+        <h4 id="titulo"></h4>
+        <p id="ano"></p>
+        <p id="duracao"></p>
+        <p id="generos"></p>
+        <p id="nota"></p>
+    </div>
+
+    <script>
+        const imagem = document.getElementById("imagem");
+        const titulo = document.getElementById("titulo");
+        const ano = document.getElementById("ano");
+        const duracao = document.getElementById("duracao");
+        const generos = document.getElementById("generos");
+        const nota = document.getElementById("nota");
+
+        fetch('http://www.omdbapi.com/?t=cars&apikey=76536016&')
+        .then(response => response.json())
+        .then(data => {
+            imagem.src = data.Poster;
+            titulo.innerText = data.Title
+            ano.innerText = data.Year
+            duracao.innerText = data.Runtime
+            generos.innerText = data.Genre
+            nota.innerText = data.imdbRating
+        });
+    </script>
+</body>
+</html>
